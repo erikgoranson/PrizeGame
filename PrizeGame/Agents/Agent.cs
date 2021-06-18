@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PrizeGame.BoardObjects;
 using PrizeGame.Boards;
 using static PrizeGame.Prizes;
 
 namespace PrizeGame.Agents
 {
-    public abstract class Agent
+    public class Agent : BoardObject
     {
-        internal Agent()
+        /*internal Agent()
         {
 
-        }
-
-        /*
-        public void GetDirection(Board b, Prize element)
-        {
-            //get direction/coordinations of whatever element
         }*/
+
+        
+        internal void GetDirection(Board B, BoardObject Target)
+        {
+
+            
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PrizeGame.BoardObjects
 {
-    class BoardObject
+    public abstract class BoardObject
     {
         public string Value { get; set; }
         public int X { get; set; }

@@ -31,7 +31,7 @@ namespace PrizeGame.Boards
             Cells[6, 6] = "D"; //MyAgent
         }
 
-        public List<Prize> GetPrizes() //check for consistency
+        public List<Prize> GetPrizes() 
         {
             List<Prize> Prizes = new Prizes(BoardDimensions).PrizeList;
             return Prizes;
