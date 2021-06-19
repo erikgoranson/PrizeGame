@@ -43,7 +43,9 @@ namespace PrizeGame
 
         public class Prize : BoardObject
         {
-            public int Score { get; set; }
+            public override int Score { get; set; }
+
+            public override bool IsPrize { get; set; } = true;
         }
     }
 }

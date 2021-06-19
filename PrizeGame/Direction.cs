@@ -17,7 +17,19 @@ namespace PrizeGame
             this.DetermineDirection(Player, Target);
             this.DetermineMovement(Player);
             this.DetermineNextPosition(Grid, Player);
+            this.X = this.NextPosition.X;
+            this.Y = this.NextPosition.Y;
         }
+
+        /// <summary>
+        /// The new X direction
+        /// </summary>
+        public int X { get; set; }
+
+        /// <summary>
+        /// The new Y direction
+        /// </summary>
+        public int Y { get; set; }
 
         //the gross IF block:
         //determine which direction something is from the target

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PrizeGame.Agents;
+using PrizeGame.BoardObjects;
 using PrizeGame.Boards;
 using static PrizeGame.Direction;
 
@@ -13,6 +14,11 @@ namespace PrizeGame
     {
         static void Main(string[] args)
         {
+
+
+            //BoardObject testobj = new BoardObject(4, 4);
+            
+            
             Board Test = new Board();
 
             //Nullable<Directions> direction = null;

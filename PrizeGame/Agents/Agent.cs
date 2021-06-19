@@ -11,8 +11,23 @@ namespace PrizeGame.Agents
 {
     public abstract class Agent : BoardObject 
     {
-        public Agent()
+        public Agent(int X, int Y, string Name)
         {
+            this.X = X;
+            this.Y = Y;
+            this.Value = Name;
+        }
+
+        public Agent(string Name) : this(0, 0, Name)
+        {
+            this.Value = Name;
+        }
+
+        public void SetPosition(BoardObject newPoint)
+        {
+            this.X = newPoint.X;
+            this.Y = newPoint.Y;
+            //this.Value = Name;
         }
 
         public virtual int AllowedPace { get; set; } = 1;

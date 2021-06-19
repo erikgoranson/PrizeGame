@@ -11,6 +11,10 @@ namespace PrizeGame.Agents
 {
     public class MinDistanceAgent : Agent
     {
+        public MinDistanceAgent(string Name) : base(Name)
+        {
+        }
+
         public override void Move(Board board) 
         {
             int minDistance = Int32.MaxValue;
@@ -25,15 +29,14 @@ namespace PrizeGame.Agents
             }
             if (direction.HasValue)
             {
-                //board.Move(this, direction.GetValueOrDefault());
+                board.Move(this, direction.GetValueOrDefault());
             }
         }
 
         private int Distance (BoardObject target)
         {
-            return 1;
+            var distance = Math.Sqrt((Math.Pow(target.X - this.X, 2) + Math.Pow(target.Y - this.Y, 2)));
+            return Convert.ToInt32(distance);
         }
-
-
     }
 }
