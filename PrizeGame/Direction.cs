@@ -1,4 +1,5 @@
 ﻿using PrizeGame.BoardObjects;
+using PrizeGame.Boards;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,52 +8,60 @@ using System.Threading.Tasks;
 
 namespace PrizeGame
 {
-
-
-    public class Directions //this was Direction.cs in the game
+    public class Direction 
     {
-        public int allowedMovePace = 1;
+        private int AllowedPace = 1; //add an overload to allow +1 move in the future? was that part of the test?
+
+        public Direction()
+        {
+
+        }
 
         //the gross IF block:
         //determine which direction something is from the target
-        public void DetermineDirection(BoardObject Agent, BoardObject Target) //add an overload to allow +1 move in the future? was that part of the test?
+        public void DetermineDirection(BoardObject Agent, BoardObject Target) 
         {
             if (Target.Y > Agent.Y && Target.X == Agent.X)
             {
-                this.Direction = DIRECTIONS.North;
+                this.Move_Direction = DIRECTIONS.North;
             }
             else if (Target.Y > Agent.Y && Target.X > Agent.X)
             {
-                this.Direction = DIRECTIONS.Northeast;
+                this.Move_Direction = DIRECTIONS.Northeast;
             }
             else if (Target.Y == Agent.Y && Target.X > Agent.X)
             {
-                this.Direction = DIRECTIONS.East;
+                this.Move_Direction = DIRECTIONS.East;
             }
             else if (Target.Y < Agent.Y && Target.X > Agent.X)
             {
-                this.Direction = DIRECTIONS.Southeast;
+                this.Move_Direction = DIRECTIONS.Southeast;
             }
             else if (Target.Y < Agent.Y && Target.X == Agent.X)
             {
-                this.Direction = DIRECTIONS.South;
+                this.Move_Direction = DIRECTIONS.South;
             }
             else if (Target.Y < Agent.Y && Target.X < Agent.X)
             {
-                this.Direction = DIRECTIONS.Southwest;
+                this.Move_Direction = DIRECTIONS.Southwest;
             }
             else if (Target.Y == Agent.Y && Target.X < Agent.X)
             {
-                this.Direction = DIRECTIONS.West;
+                this.Move_Direction = DIRECTIONS.West;
             }
             else if (Target.Y > Agent.Y && Target.X < Agent.X)
             {
-                this.Direction = DIRECTIONS.Northwest;
+                this.Move_Direction = DIRECTIONS.Northwest;
             }
             else
             {
-                this.Direction = DIRECTIONS.NOT_SET;
+                this.Move_Direction = DIRECTIONS.NOT_SET;
             }
+        }
+
+        public bool CellSpaceAvailable(Board Grid)
+        {
+            return (Grid.Cells[NextMovement.X, NextMovement.Y] != null) ? true : false;
         }
 
         public struct Position 
@@ -73,23 +82,25 @@ namespace PrizeGame
         /// <summary>
 		/// Gets or sets the direction wrapped by this class.
 		/// </summary>
-        public Position NextPosition { get; set; } //maybe rename
+        public Position NextPosition { get; set; }
 
-        internal DIRECTIONS Direction { get; set; } //the naming is getting awful here
+        public Position NextMovement { get; set; }
+
+        internal DIRECTIONS Move_Direction { get; set; } 
 
         //provide the proper coordinates for whichever direction something is from the target (i.e., North = x+0,y+1)
         //diagonals always try to move on the Y axis by default
-        public void DetermineNextPosition() //rename me
+        public void DetermineNextMovement() //rename me
         {
-            Position NextPosition = new Position { }; 
+            Position NextMovement = new Position(); 
 
-            switch (this.Direction)
+            switch (this.Move_Direction)
             {
                 case DIRECTIONS.North:
                 case DIRECTIONS.Northeast:
                 case DIRECTIONS.Northwest:
-                    NextPosition.X = 0;
-                    NextPosition.Y = 1;
+                    NextMovement.X = 0;
+                    NextMovement.Y = AllowedPace;
                     /*this.NextPosition = new Direction
                     {
                         X = 0,
@@ -97,31 +108,36 @@ namespace PrizeGame
                     };*/
                     break;
                 case DIRECTIONS.East:
-                    NextPosition.X = 1;
-                    NextPosition.Y = 0;
+                    NextMovement.X = AllowedPace;
+                    NextMovement.Y = 0;
                     break;
                 case DIRECTIONS.West:
-                    NextPosition.X = -1;
-                    NextPosition.Y = 0;
+                    NextMovement.X = -AllowedPace;
+                    NextMovement.Y = 0;
                     break;
                 case DIRECTIONS.South:
                 case DIRECTIONS.Southeast:
                 case DIRECTIONS.Southwest:
-                    NextPosition.X = 0;
-                    NextPosition.Y = -1;
+                    NextMovement.X = 0;
+                    NextMovement.Y = -AllowedPace;
                     break;
                 default:
-                    throw new InvalidOperationException($"{nameof(this.Direction)} failed - Unknown direction");
+                    throw new InvalidOperationException($"{nameof(this.Move_Direction)} failed - Unknown direction");
             }
 
-            this.NextPosition = NextPosition;
+            this.NextMovement = NextMovement;
         }
 
-        public Position DetermineDifferenceCoordinates()
+        public void DetermineNextPosition(Board Grid, BoardObject Agent) //is this GetDirection()?
         {
-            Position direction = new Position { }; //should this be something the class creates automatically, instead? on initialzing? 
-
-            return direction;
+            if (this.CellSpaceAvailable(Grid))
+            {
+                this.NextPosition = new Position
+                {
+                    X = Agent.X + NextMovement.X,
+                    Y = Agent.Y + NextMovement.Y,
+                };
+            }
         }
 
         public enum DIRECTIONS 

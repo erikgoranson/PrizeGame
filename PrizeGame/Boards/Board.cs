@@ -7,7 +7,7 @@ using static PrizeGame.Prizes;
 
 namespace PrizeGame.Boards
 {
-    class Board
+    public class Board
     {
         public Board()
         {
@@ -16,7 +16,7 @@ namespace PrizeGame.Boards
             this.PrintBoard();
         }
 
-        public string[,] Cells { get; set; }
+        public string[,] Cells { get; set; } //tiles?
 
         public int BoardDimensions { get; set; } = 11;
 
@@ -31,13 +31,13 @@ namespace PrizeGame.Boards
             Cells[6, 6] = "D"; //MyAgent
         }
 
-        public List<Prize> GetPrizes() 
+        internal List<Prize> GetPrizes() 
         {
             List<Prize> Prizes = new Prizes(BoardDimensions).PrizeList;
             return Prizes;
         }
 
-        public void PlacePrizes()
+        internal void PlacePrizes()
         {
             foreach (Prize element in this.GetPrizes())
             {
@@ -56,7 +56,7 @@ namespace PrizeGame.Boards
             }
         }
 
-        public void PrintBoard()
+        private void PrintBoard()
         {
             string VerticalBorder = " +-+-+-+-+-+-+-+-+-+-+";
             Console.WriteLine(VerticalBorder);

@@ -22,6 +22,19 @@ namespace PrizeGame
                 Y = 0,
             };
 
+            int allowed = 1;
+
+            int testInt = 10;
+
+            testInt = 0-allowed;
+
+            
+
+            //bool boolTest = (Test.Cells[4, 4] != null) ? true : false;
+            //test = (Grid.Cells[Target.X, Target.Y] != null) ? true : false;
+            //Console.WriteLine(boolTest);
+
+
             Console.ReadLine();
 
             /*Direction test = new Direction

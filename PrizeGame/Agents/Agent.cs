@@ -20,7 +20,7 @@ namespace PrizeGame.Agents
         internal void GetDirection(Board B, BoardObject Target)
         {
 
-            
+
         }
     }
 }
