@@ -10,5 +10,8 @@ namespace PrizeGame
     {
         //do all the stuff here. build board, make prizes. keep score. instantiate players
         //turns, also, and scoring
+
+        //how to handle ties goes here
+
     }
 }

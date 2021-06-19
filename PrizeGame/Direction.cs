@@ -1,4 +1,5 @@
-﻿using PrizeGame.BoardObjects;
+﻿using PrizeGame.Agents;
+using PrizeGame.BoardObjects;
 using PrizeGame.Boards;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,14 @@ using System.Threading.Tasks;
 
 namespace PrizeGame
 {
-    public class Direction 
+
+    public struct Direction 
     {
-        private int AllowedPace = 1; //add an overload to allow +1 move in the future? was that part of the test?
-
-        public Direction()
+        public Direction(Board Grid, Agent Player, BoardObject Target) : this()
         {
-
+            this.DetermineDirection(Player, Target);
+            this.DetermineMovement(Player);
+            this.DetermineNextPosition(Grid, Player);
         }
 
         //the gross IF block:
@@ -59,40 +61,17 @@ namespace PrizeGame
             }
         }
 
-        public bool CellSpaceAvailable(Board Grid)
-        {
-            return (Grid.Cells[NextMovement.X, NextMovement.Y] != null) ? true : false;
-        }
+        public BoardObject NextPosition { get; private set; }
 
-        public struct Position 
-        {
-            public int X { get; set; }
-            public int Y { get; set; }
-        }
-
-        /*
-        Y + 1, X + 0 = up
-        Y - 0, X + 0 = down
-        Y + 0, X - 1 = right
-        Y + 0, X + 1 = left
-         */
-
-        //need class to determine everything on new instance. new instance would then require board and target element(s)
-
-        /// <summary>
-		/// Gets or sets the direction wrapped by this class.
-		/// </summary>
-        public Position NextPosition { get; set; }
-
-        public Position NextMovement { get; set; }
+        public BoardObject NextMovement { get; private set; }
 
         internal DIRECTIONS Move_Direction { get; set; } 
 
         //provide the proper coordinates for whichever direction something is from the target (i.e., North = x+0,y+1)
         //diagonals always try to move on the Y axis by default
-        public void DetermineNextMovement() //rename me
+        public void DetermineMovement(Agent Player) //rename me
         {
-            Position NextMovement = new Position(); 
+            BoardObject NextMovement = new BoardObject(); 
 
             switch (this.Move_Direction)
             {
@@ -100,7 +79,7 @@ namespace PrizeGame
                 case DIRECTIONS.Northeast:
                 case DIRECTIONS.Northwest:
                     NextMovement.X = 0;
-                    NextMovement.Y = AllowedPace;
+                    NextMovement.Y = Player.AllowedPace;
                     /*this.NextPosition = new Direction
                     {
                         X = 0,
@@ -108,18 +87,18 @@ namespace PrizeGame
                     };*/
                     break;
                 case DIRECTIONS.East:
-                    NextMovement.X = AllowedPace;
+                    NextMovement.X = Player.AllowedPace;
                     NextMovement.Y = 0;
                     break;
                 case DIRECTIONS.West:
-                    NextMovement.X = -AllowedPace;
+                    NextMovement.X = -Player.AllowedPace;
                     NextMovement.Y = 0;
                     break;
                 case DIRECTIONS.South:
                 case DIRECTIONS.Southeast:
                 case DIRECTIONS.Southwest:
                     NextMovement.X = 0;
-                    NextMovement.Y = -AllowedPace;
+                    NextMovement.Y = -Player.AllowedPace;
                     break;
                 default:
                     throw new InvalidOperationException($"{nameof(this.Move_Direction)} failed - Unknown direction");
@@ -128,15 +107,17 @@ namespace PrizeGame
             this.NextMovement = NextMovement;
         }
 
-        public void DetermineNextPosition(Board Grid, BoardObject Agent) //is this GetDirection()?
+        public void DetermineNextPosition(Board Grid, BoardObject Agent) 
         {
-            if (this.CellSpaceAvailable(Grid))
+            BoardObject NextPosition = new BoardObject
             {
-                this.NextPosition = new Position
-                {
-                    X = Agent.X + NextMovement.X,
-                    Y = Agent.Y + NextMovement.Y,
-                };
+                X = Agent.X + NextMovement.X,
+                Y = Agent.Y + NextMovement.Y,
+            };
+
+            if (!Grid.Cells[NextPosition.X, NextPosition.Y].IsPlayer)
+            {
+                this.NextPosition = NextPosition;
             }
         }
 

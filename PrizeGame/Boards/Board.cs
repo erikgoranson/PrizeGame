@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PrizeGame.BoardObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,19 +17,20 @@ namespace PrizeGame.Boards
             this.PrintBoard();
         }
 
-        public string[,] Cells { get; set; } //tiles?
+        public BoardObject[,] Cells { get; set; } //tiles?
 
         public int BoardDimensions { get; set; } = 11;
 
         public void Reset()
         {
-            Cells = new string[BoardDimensions, BoardDimensions];
+            Cells = new BoardObject[BoardDimensions, BoardDimensions];
             //rules were hardcoded to players
 
-            Cells[4, 4] = "A"; //random
-            Cells[4, 6] = "B"; //MinDistance
-            Cells[6, 4] = "C"; //MaxDistance
-            Cells[6, 6] = "D"; //MyAgent
+            Cells[4, 4] = new BoardObject { Value = "A", }; //random
+            Cells[4, 6] = new BoardObject { Value = "B", }; //MinDistance
+            Cells[6, 4] = new BoardObject { Value = "C", }; //MaxDistance
+            Cells[6, 6] = new BoardObject { Value = "D", }; //MyAgent
+            //this will sometimes cause errors until a more permanent setup is complete
         }
 
         internal List<Prize> GetPrizes() 
@@ -47,31 +49,31 @@ namespace PrizeGame.Boards
                 //change to while loop
                 if (Cells[x, y] == null)
                 {
-                    Cells[x, y] = element.Value;
+                    Cells[x, y] = element;
                 }
                 else
                 {
-                    Cells[x + 1, y + 1] = element.Value;
+                    Cells[x + 1, y + 1] = element;
                 }
             }
         }
 
         private void PrintBoard()
         {
+            ///string test = Cells[4, 4].Value;
             string VerticalBorder = " +-+-+-+-+-+-+-+-+-+-+";
             Console.WriteLine(VerticalBorder);
             for (int i = 0; i < BoardDimensions; i++)
             {
                 for (int j = 0; j < BoardDimensions; j++)
                 {
-                    string test = Cells[i, j];
                     if (Cells[i, j] == null)
                     {
-                        Console.Write(Cells[i, j] + " |");
+                        Console.Write(" |");
                     }
                     else
                     {
-                        Console.Write(Cells[i, j] + "|");
+                        Console.Write(Cells[i, j].Value + "|");
                     }
 
                 }

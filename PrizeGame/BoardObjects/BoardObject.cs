@@ -6,10 +6,20 @@ using System.Threading.Tasks;
 
 namespace PrizeGame.BoardObjects
 {
-    public abstract class BoardObject
+    public class BoardObject
     {
         public string Value { get; set; }
+
+        /// <summary>
+        /// This object's X position
+        /// </summary>
         public int X { get; set; }
+
+        /// <summary>
+        /// This object's Y position
+        /// </summary>
         public int Y { get; set; }
+
+        public virtual bool IsPlayer { get; set; } = false;
     }
 }
