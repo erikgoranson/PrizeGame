@@ -9,27 +9,23 @@ using static PrizeGame.Prizes;
 
 namespace PrizeGame.Agents
 {
-    public class Agent : BoardObject
+    public abstract class Agent : BoardObject 
     {
-        /*internal Agent()
+        public Agent()
         {
+        }
 
-        }*/
-
-
-
-        public virtual int AllowedPace { get; set; }  = 1;
+        public virtual int AllowedPace { get; set; } = 1;
 
         public override bool IsPlayer { get; set; } = true;
 
         //add previous move tracker here?
 
-
-
-
-        internal void GetDirection(Board B, BoardObject Target)
+        internal Direction GetDirection(Board Grid, BoardObject Target)
         {
-
+            return new Direction(Grid, this, Target);
         }
+
+        public abstract void Move(Board board);
     }
 }

@@ -17,11 +17,7 @@ namespace PrizeGame
 
             //Nullable<Directions> direction = null;
 
-            Agent CoolGuy = new Agent()
-            {
-                X = 0,
-                Y = 0,
-            };
+            
 
             int allowed = 1;
 

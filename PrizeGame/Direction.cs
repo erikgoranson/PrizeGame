@@ -61,9 +61,9 @@ namespace PrizeGame
             }
         }
 
-        public BoardObject NextPosition { get; private set; }
+        public BoardObject NextPosition { get;  set; }
 
-        public BoardObject NextMovement { get; private set; }
+        public BoardObject NextMovement { get;  set; }
 
         internal DIRECTIONS Move_Direction { get; set; } 
 
@@ -118,6 +118,10 @@ namespace PrizeGame
             if (!Grid.Cells[NextPosition.X, NextPosition.Y].IsPlayer)
             {
                 this.NextPosition = NextPosition;
+            } 
+            else
+            {
+                this.NextMovement = null;
             }
         }
 
