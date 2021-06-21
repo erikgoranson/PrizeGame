@@ -17,8 +17,7 @@ namespace PrizeGame
             this.DetermineDirection(Player, Target);
             this.DetermineMovement(Player);
             this.DetermineNextPosition(Grid, Player);
-            this.X = this.NextPosition.X;
-            this.Y = this.NextPosition.Y;
+            
         }
 
         /// <summary>
@@ -35,11 +34,11 @@ namespace PrizeGame
         //determine which direction something is from the target
         public void DetermineDirection(BoardObject Agent, BoardObject Target) 
         {
-            if (Target.Y > Agent.Y && Target.X == Agent.X)
+            if (Target.Y < Agent.Y && Target.X == Agent.X)
             {
                 this.Move_Direction = DIRECTIONS.North;
             }
-            else if (Target.Y > Agent.Y && Target.X > Agent.X)
+            else if (Target.Y < Agent.Y && Target.X > Agent.X)
             {
                 this.Move_Direction = DIRECTIONS.Northeast;
             }
@@ -47,15 +46,15 @@ namespace PrizeGame
             {
                 this.Move_Direction = DIRECTIONS.East;
             }
-            else if (Target.Y < Agent.Y && Target.X > Agent.X)
+            else if (Target.Y > Agent.Y && Target.X > Agent.X)
             {
                 this.Move_Direction = DIRECTIONS.Southeast;
             }
-            else if (Target.Y < Agent.Y && Target.X == Agent.X)
+            else if (Target.Y > Agent.Y && Target.X == Agent.X)
             {
                 this.Move_Direction = DIRECTIONS.South;
             }
-            else if (Target.Y < Agent.Y && Target.X < Agent.X)
+            else if (Target.Y > Agent.Y && Target.X < Agent.X)
             {
                 this.Move_Direction = DIRECTIONS.Southwest;
             }
@@ -63,7 +62,7 @@ namespace PrizeGame
             {
                 this.Move_Direction = DIRECTIONS.West;
             }
-            else if (Target.Y > Agent.Y && Target.X < Agent.X)
+            else if (Target.Y < Agent.Y && Target.X < Agent.X)
             {
                 this.Move_Direction = DIRECTIONS.Northwest;
             }
@@ -91,7 +90,7 @@ namespace PrizeGame
                 case DIRECTIONS.Northeast:
                 case DIRECTIONS.Northwest:
                     NextMovement.X = 0;
-                    NextMovement.Y = Player.AllowedPace;
+                    NextMovement.Y = -Player.AllowedPace;
                     /*this.NextPosition = new Direction
                     {
                         X = 0,
@@ -110,7 +109,7 @@ namespace PrizeGame
                 case DIRECTIONS.Southeast:
                 case DIRECTIONS.Southwest:
                     NextMovement.X = 0;
-                    NextMovement.Y = -Player.AllowedPace;
+                    NextMovement.Y = Player.AllowedPace;
                     break;
                 default:
                     throw new InvalidOperationException($"{nameof(this.Move_Direction)} failed - Unknown direction");
@@ -127,13 +126,12 @@ namespace PrizeGame
                 Y = Agent.Y + NextMovement.Y,
             };
 
-            if (!Grid.Cells[NextPosition.X, NextPosition.Y].IsPlayer)
+            //fix this. so long
+            if (Grid.Cells[NextPosition.X, NextPosition.Y] == null || Grid.Cells[NextPosition.X, NextPosition.Y].IsPrize)
             {
                 this.NextPosition = NextPosition;
-            } 
-            else
-            {
-                this.NextMovement = null;
+                this.X = NextPosition.X;
+                this.Y = NextPosition.Y;
             }
         }
 

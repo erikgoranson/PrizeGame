@@ -37,10 +37,12 @@ namespace PrizeGame.BoardObjects
         /// </summary>
         public int Y { get; set; }
 
-        public virtual bool IsPlayer { get; set; } = false;
+        public virtual bool IsAgent { get; set; } = false;
 
         public virtual bool IsPrize { get; set; } = false;
 
-        public virtual int Score { get; set; } = 0;
+        public virtual int PrizeValue { get; set; } = 0;
+
+        public virtual int ID { get; set; }
     }
 }

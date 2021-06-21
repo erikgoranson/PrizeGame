@@ -32,11 +32,15 @@ namespace PrizeGame.Agents
 
         public virtual int AllowedPace { get; set; } = 1;
 
-        public override bool IsPlayer { get; set; } = true;
+        public override bool IsAgent { get; set; } = true;
+
+        public int Score { get; set; } = 0;
+
+        public bool HasScored = false;
 
         //add previous move tracker here?
 
-        internal Direction GetDirection(Board Grid, BoardObject Target)
+        internal Direction? GetDirection(Board Grid, BoardObject Target)
         {
             return new Direction(Grid, this, Target);
         }
