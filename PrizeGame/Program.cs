@@ -14,14 +14,9 @@ namespace PrizeGame
     {
         static void Main(string[] args)
         {
-            Board Test = new Board();
-
-            while (Test.GetPrizes().Any())
-            {
-                Test.StartTurn();
-            }
-
-            Console.WriteLine("Game Over");
+            Game NewGame = new Game();
+            NewGame.Start();
+            //prob better add an execute method, and some way to reset 
 
            Console.ReadLine();
         }
