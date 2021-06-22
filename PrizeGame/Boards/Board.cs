@@ -167,9 +167,9 @@ namespace PrizeGame.Boards
             List<Agent> Agents = new List<Agent>
             {
                 new MinDistanceAgent("A"),
-                new MinDistanceAgent("B"),
+                new MaxPointsAgent("B"),
                 new MinDistanceAgent("C"),
-                new MinDistanceAgent("D"),
+                new MyAgent("D"),
             };
             this.Agents = Agents;
         }
