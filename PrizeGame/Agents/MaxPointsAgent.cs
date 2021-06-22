@@ -9,21 +9,21 @@ using static PrizeGame.Prizes;
 
 namespace PrizeGame.Agents
 {
-    public class MinDistanceAgent : Agent
+    public class MaxPointsAgent : Agent
     {
-        public MinDistanceAgent(string Name) : base(Name)
+        public MaxPointsAgent(string Name) : base(Name)
         {
         }
 
-        public override void Move(Board board) 
+        public override void Move(Board board)
         {
-            int minDistance = Int32.MaxValue;
+            int maxValue = Int32.MinValue;
             Nullable<Direction> direction = null;
             foreach (Prize element in board.GetPrizes())
             {
-                if (Distance(element) < minDistance && GetDirection(board, element) != null)
+                if (element.PrizeValue > maxValue && GetDirection(board, element) != null)
                 {
-                    minDistance = Distance(element);
+                    maxValue = element.PrizeValue;
                     direction = GetDirection(board, element);
                 }
             }
@@ -31,12 +31,6 @@ namespace PrizeGame.Agents
             {
                 board.Move(this, direction.GetValueOrDefault());
             }
-        }
-
-        private int Distance (BoardObject target)
-        {
-            var distance = Math.Sqrt((Math.Pow(target.X - this.X, 2) + Math.Pow(target.Y - this.Y, 2)));
-            return Convert.ToInt32(distance);
         }
     }
 }

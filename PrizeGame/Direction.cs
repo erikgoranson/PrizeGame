@@ -30,8 +30,11 @@ namespace PrizeGame
         /// </summary>
         public int Y { get; set; }
 
-        //the gross IF block:
-        //determine which direction something is from the target
+        /// <summary>
+        /// Evaluates the difference between the <see cref="Agent"/> obj and <see cref="Target"/> cell space to determine which direction the Agent will move
+        /// </summary>
+        /// <param name="Agent">The active agent that will need to move</param>
+        /// <param name="Target">The position where the agent wants to move</param>
         public void DetermineDirection(BoardObject Agent, BoardObject Target) 
         {
             if (Target.Y < Agent.Y && Target.X == Agent.X)
@@ -72,14 +75,26 @@ namespace PrizeGame
             }
         }
 
+        /// <summary>
+        /// Stores the actual calculated x/y position of an agent's next move
+        /// </summary>
         public BoardObject NextPosition { get;  set; }
 
-        public BoardObject NextMovement { get;  set; }
+        /// <summary>
+        /// Stores the difference returned by <see cref="DetermineMovement(Agent)"/> to be added to an active agent's current X/Y position for determining the next position where they will move
+        /// </summary>
+        private BoardObject NextMovement { get;  set; }
 
-        internal DIRECTIONS Move_Direction { get; set; } 
+        internal DIRECTIONS Move_Direction { get; set; }
 
         //provide the proper coordinates for whichever direction something is from the target (i.e., North = x+0,y+1)
         //diagonals always try to move on the Y axis by default
+        /// <summary>
+        /// References possible <see cref="DIRECTIONS"/> and returns the correct int needed on the X or Y axis in order for the agent to move that direction
+        /// The int returned depends on the agent's allowed pace
+        /// Diagonal movements are not allowed and will be changed to the North or South
+        /// </summary>
+        /// <param name="Player">The active agent that will need to move</param>
         public void DetermineMovement(Agent Player) //rename me
         {
             BoardObject NextMovement = new BoardObject(); 
@@ -91,11 +106,6 @@ namespace PrizeGame
                 case DIRECTIONS.Northwest:
                     NextMovement.X = 0;
                     NextMovement.Y = -Player.AllowedPace;
-                    /*this.NextPosition = new Direction
-                    {
-                        X = 0,
-                        Y = 1,
-                    };*/
                     break;
                 case DIRECTIONS.East:
                     NextMovement.X = Player.AllowedPace;
@@ -118,6 +128,11 @@ namespace PrizeGame
             this.NextMovement = NextMovement;
         }
 
+        /// <summary>
+        /// Adds <see cref="NextMovement"/> to the agent's current position to determine where they will move
+        /// </summary>
+        /// <param name="Grid">The current game board</param>
+        /// <param name="Agent">The active agent that will need to move</param>
         public void DetermineNextPosition(Board Grid, BoardObject Agent) 
         {
             BoardObject NextPosition = new BoardObject
@@ -126,8 +141,7 @@ namespace PrizeGame
                 Y = Agent.Y + NextMovement.Y,
             };
 
-            //fix this. so long
-            if (Grid.Cells[NextPosition.Y, NextPosition.X] == null || Grid.Cells[NextPosition.Y, NextPosition.X].IsPrize) //needs to be fixed
+            if (Grid.GetCell(NextPosition) == null || Grid.GetCell(NextPosition).IsPrize) 
             {
                 this.NextPosition = NextPosition;
                 this.X = NextPosition.X;
@@ -141,6 +155,9 @@ namespace PrizeGame
             }
         }
 
+        /// <summary>
+        /// The possible directions an agent can move across the board
+        /// </summary>
         public enum DIRECTIONS 
         {
             NOT_SET,
@@ -153,6 +170,5 @@ namespace PrizeGame
             West,
             Northwest
         }
-
     }
 }

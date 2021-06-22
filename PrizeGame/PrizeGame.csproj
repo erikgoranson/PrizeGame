@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agents\Agent.cs" />
+    <Compile Include="Agents\MaxPointsAgent.cs" />
     <Compile Include="Agents\MinDistanceAgent.cs" />
+    <Compile Include="Agents\MyAgent.cs" />
     <Compile Include="BoardObjects\BoardObject.cs" />
     <Compile Include="Boards\Board.cs" />
     <Compile Include="Direction.cs" />
