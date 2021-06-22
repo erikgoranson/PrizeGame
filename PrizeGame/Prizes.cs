@@ -33,17 +33,22 @@ namespace PrizeGame
                 int score = rnd.Next(1, MaxPrizeValue);
                 PrizeList.Add(new Prize
                 {
-                    Score = score,
+                    PrizeValue = score,
                     X = x,
                     Y = y,
                     Value = score.ToString(),
+                    ID = i,
                 }); 
             }
         }
 
         public class Prize : BoardObject
         {
-            public int Score { get; set; }
+            public override int PrizeValue { get; set; }
+
+            public override bool IsPrize { get; set; } = true;
+
+            public override int ID { get; set; }
         }
     }
 }
