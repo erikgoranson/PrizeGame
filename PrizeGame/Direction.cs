@@ -127,9 +127,15 @@ namespace PrizeGame
             };
 
             //fix this. so long
-            if (Grid.Cells[NextPosition.X, NextPosition.Y] == null || Grid.Cells[NextPosition.X, NextPosition.Y].IsPrize)
+            if (Grid.Cells[NextPosition.Y, NextPosition.X] == null || Grid.Cells[NextPosition.Y, NextPosition.X].IsPrize) //needs to be fixed
             {
                 this.NextPosition = NextPosition;
+                this.X = NextPosition.X;
+                this.Y = NextPosition.Y;
+            } 
+            else
+            {
+                this.NextPosition = new BoardObject();
                 this.X = NextPosition.X;
                 this.Y = NextPosition.Y;
             }

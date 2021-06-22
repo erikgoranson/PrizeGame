@@ -16,10 +16,14 @@ namespace PrizeGame
         {
             Board Test = new Board();
 
+            while (Test.GetPrizes().Any())
+            {
+                Test.StartTurn();
+            }
 
-            Test.StartTurn();
+            Console.WriteLine("Game Over");
 
-            Console.ReadLine();
+           Console.ReadLine();
         }
     }
 }

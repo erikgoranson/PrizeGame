@@ -19,9 +19,11 @@ namespace PrizeGame.Agents
         {
             int minDistance = Int32.MaxValue;
             Nullable<Direction> direction = null;
+            Prize test = null; //debug only
             foreach (Prize element in board.GetPrizes())
             {
-                if(Distance(element) < minDistance && GetDirection(board, element) != null)
+                test = element; //debug only
+                if (Distance(element) < minDistance && GetDirection(board, element) != null)
                 {
                     minDistance = Distance(element);
                     direction = GetDirection(board, element);

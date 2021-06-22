@@ -21,6 +21,38 @@ namespace PrizeGame.Boards
 
         public static int BoardDimensions { get; set; } = 11;
 
+        public BoardObject GetCell(BoardObject Target)
+        {
+            return Cells[Target.Y, Target.X];
+        }
+
+        public BoardObject GetCell(Direction Target)
+        {
+            return Cells[Target.Y, Target.X];
+        }
+
+        public void SetCell(BoardObject Obj)
+        {
+            //2D arrays are written as array[y][x] (backwards)
+            this.Cells[Obj.Y, Obj.X] = Obj;
+        }
+
+        public void SetCell(BoardObject Address, Agent Value)
+        {
+            //2D arrays are written as array[y][x] (backwards)
+            this.Cells[Address.Y, Address.X] = Value;
+        }
+
+        public void SetCell(Direction Address, Agent Value)
+        {
+            //2D arrays are written as array[y][x] (backwards)
+            BoardObject test = this.Cells[Address.Y, Address.X] = Value;
+            //this.Cells[Address.Y, Address.X] = Value;
+            this.Cells[Address.Y, Address.X] = test;
+            //Cells.SetValue(Value, Address.Y, Address.X);
+        }
+
+
         public void Reset()
         {
             Cells = new BoardObject[BoardDimensions, BoardDimensions];
@@ -32,6 +64,7 @@ namespace PrizeGame.Boards
         {
             List<BoardObject> StartPoints = new List<BoardObject>
             {
+                //these are Y, X coordinates
                 new BoardObject(4,4),
                 new BoardObject(4,6),
                 new BoardObject(6,4),
@@ -39,6 +72,8 @@ namespace PrizeGame.Boards
             };
             return StartPoints;
         }
+
+        private List<Agent> Agents { get; set; }
 
         internal List<Prize> GetPrizes() 
         {
@@ -61,7 +96,7 @@ namespace PrizeGame.Boards
             return Agents;
         }
 
-        internal List<Agent> CreateAgents()
+        internal void CreateAgents()
         {
             List<Agent> Agents = new List<Agent>
             {
@@ -70,14 +105,15 @@ namespace PrizeGame.Boards
                 new MinDistanceAgent("C"),
                 new MinDistanceAgent("D"),
             };
-            return Agents;
+            //return Agents;
+            this.Agents = Agents;
         }
 
         internal void PlacePrizes()
         {
             foreach (Prize element in this.GetPrizes())
             {
-                //2D arrays are written as array[y][x]
+                /*/2D arrays are written as array[y][x]
                 int x = element.Y;
                 int y = element.X;
 
@@ -90,27 +126,36 @@ namespace PrizeGame.Boards
                 {
                     x = x - 1; //need a better idea for moving coordinates when null but avoiding out of bounds
                     y = y - 1;
-                    element.X = y;
-                    element.Y = x;
-                    Cells[x, y] = element; 
+                    element.X = x;
+                    element.Y = y;
+                    Cells[y, x] = element; 
+                }*/
+
+                if (this.GetCell(element) != null)
+                {
+                    element.X -= 1;
+                    element.Y -= 1;
                 }
+                this.SetCell(element);
                 //bug to fix: this sometimes overwrites agents during placement?
             }
         }
 
         internal void PlaceAgents()
         {
+            this.CreateAgents();
             for (int i = 0; i < this.StartingPoints().Count; i++)
             {
-                if(this.StartingPoints().Count != this.CreateAgents().Count)
+                if(this.StartingPoints().Count != this.Agents.Count)
                 {
                     throw new ArgumentOutOfRangeException("PlaceAgent() failed - Agent count and starting points do not match");
                 }
 
-                var agent = this.CreateAgents()[i];
+                var agent = this.Agents[i];
                 var point = this.StartingPoints()[i];
-                agent.SetPosition(point);
-                Cells[point.X, point.Y] = agent;
+                agent.SetPosition(point); //maybe add to base class or refactor
+                //Cells[point.X, point.Y] = agent;
+                this.SetCell(point, agent);
             }
         }
 
@@ -147,28 +192,36 @@ namespace PrizeGame.Boards
 
         public void Move(Agent Player, Direction direction)
         {
-            //move object to new place
-            //claim score if applicable
-            //remove old position's value
-
             //store data
-            var TargetPosition = Cells[direction.X, direction.Y];
+            //var TargetPosition = this.GetCell(direction);
+            var TargetPosition = (this.GetCell(direction) != null) ? this.GetCell(direction) : new BoardObject();
 
             //add score if exists
-            if (TargetPosition != null && TargetPosition.IsPrize)
+            if (!TargetPosition.IsAgent)
             {
-                Player.Score += TargetPosition.PrizeValue;
-                Player.HasScored = true;
-                //remove prize from prizelist
-                this.Prizes.RemoveAll(item => item.ID == TargetPosition.ID);
+                if (TargetPosition.IsPrize)
+                {
+                    Player.Score += TargetPosition.PrizeValue;
+                    Player.HasScored = true;
+                    //remove prize from prizelist
+                    this.Prizes.RemoveAll(item => item.ID == TargetPosition.ID);
+                    Console.WriteLine($"Agent {Player.Value} has scored {TargetPosition.PrizeValue}");
+                }
+
+                //move object to new position
+                this.SetCell(direction, Player);
+
+                //remove old position's value
+                this.SetCell(Player, null);
+
+                if(direction.NextMovement == null)
+                {
+                    Console.WriteLine("wut");
+                }
+
+                //update the position value stored in Player
+                this.GetCell(direction).SetPosition(direction.NextPosition);
             }
-
-            //move object to new position
-            Cells[direction.X, direction.Y] = Player;
-
-            //remove old position's value
-            Cells[Player.X, Player.Y] = null;
-
         }
 
         public void StartTurn()
@@ -181,7 +234,14 @@ namespace PrizeGame.Boards
                 if (agent.HasScored)
                 {
                     //print scores
-                    Console.WriteLine($"Agent {agent.Value} has scored {agent.Score}");
+                    Console.WriteLine("Current Scores: ");
+                    foreach (Agent a in this.GetAgents())
+                    {
+                        Console.WriteLine($"Agent {a.Value} = {a.Score}");
+                    }
+
+                    //Console.WriteLine($"Agent {agent.Value} has scored {agent.Score}");
+                    agent.HasScored = false; //add this to scoring method later
                 }
             }
         }

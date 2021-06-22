@@ -23,13 +23,6 @@ namespace PrizeGame.Agents
             this.Value = Name;
         }
 
-        public void SetPosition(BoardObject newPoint)
-        {
-            this.X = newPoint.X;
-            this.Y = newPoint.Y;
-            //this.Value = Name;
-        }
-
         public virtual int AllowedPace { get; set; } = 1;
 
         public override bool IsAgent { get; set; } = true;

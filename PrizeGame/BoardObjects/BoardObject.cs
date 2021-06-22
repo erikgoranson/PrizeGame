@@ -10,6 +10,8 @@ namespace PrizeGame.BoardObjects
     {
         public BoardObject()
         {
+            this.X = 0;
+            this.Y = 0;
         }
 
         public BoardObject(int X, int Y) : this(X, Y, string.Empty)
@@ -23,6 +25,13 @@ namespace PrizeGame.BoardObjects
             this.X = X;
             this.Y = Y;
             this.Value = Value;
+        }
+
+        public void SetPosition(BoardObject newPoint)
+        {
+            this.X = newPoint.X;
+            this.Y = newPoint.Y;
+            //this.Value = Name;
         }
 
         public string Value { get; set; }
